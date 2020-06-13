@@ -49,17 +49,27 @@ router.get('/:id', (req, res) => {
         .json({ errorMessage: 'There was a problem retrieving the action' });
     });
 });
+router.get('/', (req, res) => {
+  actDB
+    .get()
+    .then(action => {
+      res.status(200).json(action);
+    })
+    .catch(err => {
+      console.log('get all actions err: ', err);
+      res
+        .status(500)
+        .json({ errorMessage: 'There was a problem retrieving the action' });
+    });
+});
 
 // DELETE request
 router.delete('/:id', (req, res) => {
   actDB
     .remove(req.params.id)
-    .then(
-      res
-        .status(200)
-        .json({ message: 'action has been deleted', action: req.action })
-    )
+    .then(res.status(200).json({ message: 'action has been deleted' }))
     .catch(err => {
+      console.log('delete action error: ', err);
       res
         .status(500)
         .json({ errorMessage: 'there was a problem deleting the action' });
